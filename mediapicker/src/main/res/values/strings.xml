@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">mediaPicker</string>
+
+    <string name="string_media_video_duration_temp">00:00</string>
+    <string name="string_media_video_duration">%1$s:%2$s</string>
+
+    <string name="string_media_upload_temp">正在上传...</string>
 </resources>
