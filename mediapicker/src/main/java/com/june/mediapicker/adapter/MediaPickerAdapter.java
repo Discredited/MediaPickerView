@@ -73,6 +73,23 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
         if (isClear) {
             items.clear();
         }
-        items.addAll(list);
+
+        //判断当前是否包含add?
+        int size = items.size();
+        if (size == 0) {
+            //添加一个add
+            PickerBean add = new PickerBean();
+            add.pickerType = PickerBean.PICKER_TYPE_ADD;
+            items.add(add);
+            items.addAll(list);
+        } else {
+            PickerBean pickerBean = items.get(size - 1);
+            if (pickerBean.pickerType != PickerBean.PICKER_TYPE_ADD) {
+                PickerBean add = new PickerBean();
+                add.pickerType = PickerBean.PICKER_TYPE_ADD;
+                items.add(add);
+            }
+            items.addAll(size - 1, list);
+        }
     }
 }

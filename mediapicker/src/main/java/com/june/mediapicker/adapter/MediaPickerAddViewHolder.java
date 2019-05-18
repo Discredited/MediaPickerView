@@ -14,18 +14,29 @@ public class MediaPickerAddViewHolder extends MediaPickerViewHolder {
     private AppCompatImageView ivAddCover;
 
     public MediaPickerAddViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView,engine,listener);
+        super(itemView, engine, listener);
         ivAddCover = itemView.findViewById(R.id.iv_add_cover);
     }
 
     @Override
-    void bindViewHolder(MediaPickerViewHolder holder, int position, PickerBean itemData) {
+    void bindViewHolder(MediaPickerViewHolder holder, final int position, final PickerBean itemData) {
         if (null != loadEngine) {
             if (itemData.isLoadResource()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverResourceId, ivAddCover);
             } else {
-                loadEngine.loadImageCover(itemView.getContext(), R.drawable.ic_media_add, ivAddCover);
+                //loadEngine.loadImageCover(itemView.getContext(), R.drawable.ic_media_add, ivAddCover);
+                ivAddCover.setImageResource(R.drawable.ic_media_add);
             }
         }
+
+        // TODO: 2019/5/18 绑定点击事件优化
+        ivAddCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != itemViewClickListener) {
+                    itemViewClickListener.onItemViewClick(v, position, itemData);
+                }
+            }
+        });
     }
 }

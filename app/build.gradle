@@ -24,8 +24,21 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:${runner_version}"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espresso_core_version}"
 
-    implementation "com.android.support:appcompat-v7:${support_version}"
     implementation "com.android.support.constraint:constraint-layout:${constraint_layout_version}"
+    implementation "com.android.support:appcompat-v7:${support_version}"
+    implementation "com.android.support:design:${support_version}"
 
     implementation project(":mediapicker")
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    //Matisse
+    implementation 'com.zhihu.android:matisse:0.5.2-beta4'
+
+    //Android Util Code
+    implementation 'com.blankj:utilcode:1.23.7'
+
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

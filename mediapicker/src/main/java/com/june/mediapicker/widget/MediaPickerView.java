@@ -6,12 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
+import com.june.mediapicker.R;
 import com.june.mediapicker.adapter.MediaPickerAdapter;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +33,9 @@ public class MediaPickerView extends RecyclerView {
     private int currentCount;
     private int maxCount;
     private MediaPickerAdapter adapter;
+    private MediaPickerInterface mediaPickerInterfaceImpl;
+
+    private boolean isPermissionGranted;  //权限是否准备就绪
 
     public MediaPickerView(@NonNull Context context) {
         this(context, null);
@@ -53,6 +60,34 @@ public class MediaPickerView extends RecyclerView {
         setHasFixedSize(true);
 
         adapter = new MediaPickerAdapter();
+        adapter.setItemViewClickListener(new OnItemViewClickListener<PickerBean>() {
+            @Override
+            public void onItemViewClick(View view, int position, PickerBean itemData) {
+                if (view.getId() == R.id.iv_add_cover) {
+                    //添加照片
+                    if (isPermissionGranted) {
+                        //执行多媒体选择
+                        if (null != mediaPickerInterfaceImpl) {
+                            mediaPickerInterfaceImpl.startMediaPicker(currentCount, maxCount);
+                        }
+                    } else {
+                        //申请权限
+                        if (null != mediaPickerInterfaceImpl) {
+                            mediaPickerInterfaceImpl.requestPermission();
+                            //注意申请权限以后需要设置 isPermissionGranted
+                        }
+                    }
+                } else if (view.getId() == R.id.iv_image_delete || view.getId() == R.id.iv_video_delete) {
+                    //删除image或者video
+                    if (null != mediaPickerInterfaceImpl) {
+                        boolean canDelete = mediaPickerInterfaceImpl.deleteMediaBean(position, itemData);
+                        if (canDelete) {
+                            //移除
+                        }
+                    }
+                }
+            }
+        });
         setAdapter(adapter);
 
         initMediaPicker();
@@ -66,6 +101,19 @@ public class MediaPickerView extends RecyclerView {
         adapter.notifyDataSetChanged();
     }
 
+    public void setPermissionGranted(boolean isGranted) {
+        isPermissionGranted = isGranted;
+    }
+
+    public void startMediaPicker() {
+        if (null != mediaPickerInterfaceImpl) {
+            mediaPickerInterfaceImpl.startMediaPicker(currentCount, maxCount);
+        }
+    }
+
+    public void setMediaPickerInterface(MediaPickerInterface pickerInterface) {
+        mediaPickerInterfaceImpl = pickerInterface;
+    }
 
     public void setOnItemViewClickListener(OnItemViewClickListener<PickerBean> listener) {
         adapter.setItemViewClickListener(listener);
@@ -75,7 +123,25 @@ public class MediaPickerView extends RecyclerView {
         adapter.setLoadEngine(engine);
     }
 
+    public void setPickerList(List<String> list, int mediaType, boolean isClear) {
+        setPickerList(convertToPicker(list, mediaType), isClear);
+    }
+
     public void setPickerList(List<PickerBean> list, boolean isClear) {
         adapter.addPickerList(list, isClear);
+        adapter.notifyDataSetChanged();
+    }
+
+    public List<PickerBean> convertToPicker(List<String> list, int mediaType) {
+        ArrayList<PickerBean> pickerList = new ArrayList<>();
+        if (null != list && list.size() > 0) {
+            for (String url : list) {
+                PickerBean pickerBean = new PickerBean();
+                pickerBean.pickerType = mediaType;
+                pickerBean.pickerCoverUrl = url;
+                pickerList.add(pickerBean);
+            }
+        }
+        return pickerList;
     }
 }
