@@ -12,6 +12,7 @@ import android.view.View;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.june.mediapicker.R;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
@@ -81,7 +82,7 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
 
             @Override
             public void loadImageCover(Context context, String url, AppCompatImageView ivCover) {
-                Glide.with(context).load(url).into(ivCover);
+                Glide.with(context).load(url).apply(new RequestOptions().centerCrop()).into(ivCover);
             }
         });
     }
