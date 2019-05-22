@@ -13,6 +13,7 @@ import com.june.mediapicker.adapter.MediaPickerAdapter;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
 import com.june.mediapicker.utils.MediaPickerInterface;
+import com.june.mediapicker.utils.MediaPickerItemDecoration;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class MediaPickerView extends RecyclerView {
         super.onFinishInflate();
         setLayoutManager(new GridLayoutManager(getContext(), column));
         setHasFixedSize(true);
+
+        addItemDecoration(new MediaPickerItemDecoration(getContext(), R.drawable.shape_rect_media_picker_item_decoration));
 
         adapter = new MediaPickerAdapter();
         adapter.setItemViewClickListener(new OnItemViewClickListener<PickerBean>() {

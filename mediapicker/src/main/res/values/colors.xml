@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_theme">#2adecb</color>
+    <color name="color_orange">#D2691E</color>
     <color name="color_white">#FFFFFF</color>
 
     <color name="color_upload_background">#33000000</color>
