@@ -82,6 +82,8 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
             add.pickerType = PickerBean.PICKER_TYPE_ADD;
             items.add(add);
             items.addAll(list);
+
+            notifyDataSetChanged();
         } else {
             PickerBean pickerBean = items.get(size - 1);
             if (pickerBean.pickerType != PickerBean.PICKER_TYPE_ADD) {
@@ -90,6 +92,40 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
                 items.add(add);
             }
             items.addAll(size - 1, list);
+            notifyItemRangeInserted(size - 1, list.size());
+        }
+    }
+
+    public void removePickerBean(int position) {
+        if (position < 0 || position >= getItemCount()) {
+            return;
+        }
+
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void removePickerBean(int position, int column) {
+        if (position < 0 || position >= getItemCount()) {
+            return;
+        }
+
+
+        int lastRowStart = getItemCount() - ((getItemCount() % column) == 0 ? column : (getItemCount() % column));
+        boolean isLastRow = position >= lastRowStart;
+
+
+        items.remove(position);
+        notifyItemRemoved(position);
+        //如果position在最后一行，则需要刷新整个最后一行，否则分割线会有问题
+
+        if (!isLastRow && getItemCount() % column == 0) {
+            lastRowStart = getItemCount() - ((getItemCount() % column) == 0 ? column : (getItemCount() % column));
+            isLastRow = true;
+        }
+
+        if (isLastRow) {
+            notifyItemRangeChanged(lastRowStart, getItemCount() - 1);
         }
     }
 }

@@ -17,14 +17,14 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
     private AppCompatTextView tvUploadProgress;
 
     public MediaPickerVideoViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView,engine,listener);
+        super(itemView, engine, listener);
         ivVideoCover = itemView.findViewById(R.id.iv_video_cover);
         ivVideoDelete = itemView.findViewById(R.id.iv_video_delete);
         tvUploadProgress = itemView.findViewById(R.id.tv_upload_progress);
     }
 
     @Override
-    void bindViewHolder(MediaPickerViewHolder holder, int position, PickerBean itemData) {
+    void bindViewHolder(MediaPickerViewHolder holder, int position, final PickerBean itemData) {
         if (null != loadEngine) {
             if (itemData.isLoadUrl()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivVideoCover);
@@ -35,6 +35,14 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
             ivVideoDelete.setVisibility(View.GONE);
         } else {
             ivVideoDelete.setVisibility(View.VISIBLE);
+            ivVideoDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != itemViewClickListener) {
+                        itemViewClickListener.onItemViewClick(v, getAdapterPosition(), itemData);
+                    }
+                }
+            });
         }
     }
 }

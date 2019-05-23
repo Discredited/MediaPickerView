@@ -86,7 +86,10 @@ public class MediaPickerView extends RecyclerView {
                         boolean canDelete = mediaPickerInterfaceImpl.deleteMediaBean(position, itemData);
                         if (canDelete) {
                             //移除
+                            adapter.removePickerBean(position);
                         }
+                    } else {
+                        adapter.removePickerBean(position);
                     }
                 }
             }
@@ -132,7 +135,6 @@ public class MediaPickerView extends RecyclerView {
 
     public void setPickerList(List<PickerBean> list, boolean isClear) {
         adapter.addPickerList(list, isClear);
-        adapter.notifyDataSetChanged();
     }
 
     public List<PickerBean> convertToPicker(List<String> list, int mediaType) {

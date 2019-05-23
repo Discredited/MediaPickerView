@@ -17,14 +17,14 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
     private AppCompatTextView tvUploadProgress;
 
     public MediaPickerImageViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView,engine,listener);
+        super(itemView, engine, listener);
         ivImageCover = itemView.findViewById(R.id.iv_image_cover);
         ivImageDelete = itemView.findViewById(R.id.iv_image_delete);
         tvUploadProgress = itemView.findViewById(R.id.tv_upload_progress);
     }
 
     @Override
-    void bindViewHolder(MediaPickerViewHolder holder, int position, PickerBean itemData) {
+    void bindViewHolder(MediaPickerViewHolder holder, int position, final PickerBean itemData) {
         if (null != loadEngine) {
             if (itemData.isLoadUrl()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivImageCover);
@@ -35,6 +35,14 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
             ivImageDelete.setVisibility(View.GONE);
         } else {
             ivImageDelete.setVisibility(View.VISIBLE);
+            ivImageDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != itemViewClickListener) {
+                        itemViewClickListener.onItemViewClick(v, getAdapterPosition(), itemData);
+                    }
+                }
+            });
         }
     }
 }

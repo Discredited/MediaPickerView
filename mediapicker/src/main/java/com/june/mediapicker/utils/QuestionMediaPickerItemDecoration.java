@@ -12,11 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-public class MediaPickerItemDecoration extends RecyclerView.ItemDecoration {
+public class QuestionMediaPickerItemDecoration extends RecyclerView.ItemDecoration {
 
     private final Drawable itemDecorationDrawable;
 
-    public MediaPickerItemDecoration(Context context, int drawableResourceId) {
+    public QuestionMediaPickerItemDecoration(Context context, int drawableResourceId) {
         itemDecorationDrawable = ContextCompat.getDrawable(context, drawableResourceId);
     }
 
@@ -40,19 +40,31 @@ public class MediaPickerItemDecoration extends RecyclerView.ItemDecoration {
             right = eachWidth - left;
             bottom = itemDecorationDrawable.getIntrinsicHeight();
 
+            if (isLastRow(position, parent)) {
+                bottom = 0;
+            }
+
             Log.e("sherry", "位置：" + position + "    L:" + left + "    T:" + top + "    R:" + right + "    B:" + bottom);
 
             outRect.set(left, top, right, bottom);
+        } else if (layoutManager instanceof LinearLayoutManager) {
+            int orientation = ((LinearLayoutManager) layoutManager).getOrientation();
+            if (orientation == LinearLayoutManager.VERTICAL) {
+                outRect.set(left, top, right, bottom);
+            } else {
+                outRect.set(left, top, right, bottom);
+            }
         } else {
             outRect.set(0, 0, 0, 0);
         }
+
     }
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDraw(c, parent, state);
-        drawVertical(c, parent);
-        drawHorizontal(c, parent);
+//        drawVertical(c, parent);
+//        drawHorizontal(c, parent);
     }
 
     //是否为最后一行

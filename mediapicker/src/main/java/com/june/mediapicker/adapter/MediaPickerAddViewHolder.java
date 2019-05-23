@@ -19,7 +19,7 @@ public class MediaPickerAddViewHolder extends MediaPickerViewHolder {
     }
 
     @Override
-    void bindViewHolder(MediaPickerViewHolder holder, final int position, final PickerBean itemData) {
+    void bindViewHolder(MediaPickerViewHolder holder, int position, final PickerBean itemData) {
         if (null != loadEngine) {
             if (itemData.isLoadResource()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverResourceId, ivAddCover);
@@ -34,7 +34,7 @@ public class MediaPickerAddViewHolder extends MediaPickerViewHolder {
             @Override
             public void onClick(View v) {
                 if (null != itemViewClickListener) {
-                    itemViewClickListener.onItemViewClick(v, position, itemData);
+                    itemViewClickListener.onItemViewClick(v, getAdapterPosition(), itemData);
                 }
             }
         });

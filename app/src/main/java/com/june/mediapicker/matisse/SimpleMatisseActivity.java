@@ -71,7 +71,7 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
 
             @Override
             public boolean deleteMediaBean(int position, PickerBean pickerBean) {
-                return false;
+                return true;
             }
         });
         mediaPickerView.setImageLoadEngine(new ImageLoadEngine() {
