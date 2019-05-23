@@ -15,11 +15,23 @@ public class PickerBean {
 
     public boolean isHiddenDeleteIcon;  //是否隐藏删除按钮
 
+    public boolean isAutoUpload = true;  //是否自动上传
+    public String uploadSuccessUrl;  //上传成功的返回路径
+
     public boolean isLoadResource() {
         return pickerCoverResourceId != 0;
     }
 
     public boolean isLoadUrl() {
         return !TextUtils.isEmpty(pickerCoverUrl);
+    }
+
+    public void setUploadSuccess(String successUrl) {
+        isAutoUpload = false;
+        uploadSuccessUrl = successUrl;
+    }
+
+    public boolean isUploadSuccess() {
+        return !TextUtils.isEmpty(uploadSuccessUrl) && !isAutoUpload;
     }
 }

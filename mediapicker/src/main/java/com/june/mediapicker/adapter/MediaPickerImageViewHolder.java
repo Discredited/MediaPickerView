@@ -8,6 +8,7 @@ import android.view.View;
 import com.june.mediapicker.R;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
@@ -16,8 +17,8 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
     private AppCompatImageView ivImageDelete;
     private AppCompatTextView tvUploadProgress;
 
-    public MediaPickerImageViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView, engine, listener);
+    public MediaPickerImageViewHolder(@NonNull View itemView, ImageLoadEngine engine, MediaPickerInterface pickerInterface, OnItemViewClickListener<PickerBean> listener) {
+        super(itemView, engine, pickerInterface, listener);
         ivImageCover = itemView.findViewById(R.id.iv_image_cover);
         ivImageDelete = itemView.findViewById(R.id.iv_image_delete);
         tvUploadProgress = itemView.findViewById(R.id.tv_upload_progress);
@@ -43,6 +44,14 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
                     }
                 }
             });
+        }
+
+
+        //关于上传
+        if (itemData.isAutoUpload) {
+            if (null != mediaPickerInterface) {
+                mediaPickerInterface.uploadMedia(getAdapterPosition(), itemData, tvUploadProgress);
+            }
         }
     }
 }

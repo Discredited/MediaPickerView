@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 /**
@@ -15,12 +16,14 @@ import com.june.mediapicker.utils.OnItemViewClickListener;
 public abstract class MediaPickerViewHolder extends RecyclerView.ViewHolder {
 
     protected ImageLoadEngine loadEngine;
+    protected MediaPickerInterface mediaPickerInterface;
     protected OnItemViewClickListener<PickerBean> itemViewClickListener;
 
-    public MediaPickerViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
+    public MediaPickerViewHolder(@NonNull View itemView, ImageLoadEngine engine, MediaPickerInterface pickerInterface, OnItemViewClickListener<PickerBean> listener) {
         super(itemView);
         this.loadEngine = engine;
         this.itemViewClickListener = listener;
+        this.mediaPickerInterface = pickerInterface;
     }
 
     abstract void bindViewHolder(MediaPickerViewHolder holder, int position, PickerBean itemData);

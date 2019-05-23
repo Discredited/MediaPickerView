@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.june.mediapicker.R;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
     private List<PickerBean> items = new ArrayList<>();
 
     private ImageLoadEngine loadEngine;
+    private MediaPickerInterface mediaPickerInterface;
     private OnItemViewClickListener<PickerBean> itemViewClickListener;
 
     public MediaPickerAdapter() {
@@ -39,12 +41,12 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
             inflater = LayoutInflater.from(viewGroup.getContext());
         }
         if (type == PickerBean.PICKER_TYPE_IMAGE) {
-            return new MediaPickerImageViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, itemViewClickListener);
+            return new MediaPickerImageViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
         }
         if (type == PickerBean.PICKER_TYPE_VIDEO) {
-            return new MediaPickerVideoViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, itemViewClickListener);
+            return new MediaPickerVideoViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
         }
-        return new MediaPickerAddViewHolder(inflater.inflate(R.layout.item_media_picker_add_layout, viewGroup, false), loadEngine, itemViewClickListener);
+        return new MediaPickerAddViewHolder(inflater.inflate(R.layout.item_media_picker_add_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
     }
 
     @Override
@@ -58,11 +60,15 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
     }
 
     public void setLoadEngine(ImageLoadEngine engine) {
-        loadEngine = engine;
+        this.loadEngine = engine;
+    }
+
+    public void setMediaPickerInterface(MediaPickerInterface pickerInterface) {
+        this.mediaPickerInterface = pickerInterface;
     }
 
     public void setItemViewClickListener(OnItemViewClickListener<PickerBean> listener) {
-        itemViewClickListener = listener;
+        this.itemViewClickListener = listener;
     }
 
     public void addPickerBean(PickerBean bean, int position) {
@@ -127,5 +133,17 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
         if (isLastRow) {
             notifyItemRangeChanged(lastRowStart, getItemCount() - 1);
         }
+    }
+
+    public boolean isUploadComplete() {
+        if (null == items || items.size() == 0) {
+            return false;
+        }
+        for (PickerBean bean : items) {
+            if (!bean.isUploadSuccess()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

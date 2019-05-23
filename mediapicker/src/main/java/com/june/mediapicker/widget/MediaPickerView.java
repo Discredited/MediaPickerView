@@ -119,6 +119,7 @@ public class MediaPickerView extends RecyclerView {
 
     public void setMediaPickerInterface(MediaPickerInterface pickerInterface) {
         mediaPickerInterfaceImpl = pickerInterface;
+        adapter.setMediaPickerInterface(mediaPickerInterfaceImpl);
     }
 
     public void setOnItemViewClickListener(OnItemViewClickListener<PickerBean> listener) {
@@ -148,5 +149,9 @@ public class MediaPickerView extends RecyclerView {
             }
         }
         return pickerList;
+    }
+
+    public boolean isUploadComplete() {
+        return adapter.isUploadComplete();
     }
 }

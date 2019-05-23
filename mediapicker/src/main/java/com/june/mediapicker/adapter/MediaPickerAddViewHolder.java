@@ -7,14 +7,15 @@ import android.view.View;
 import com.june.mediapicker.R;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 public class MediaPickerAddViewHolder extends MediaPickerViewHolder {
 
     private AppCompatImageView ivAddCover;
 
-    public MediaPickerAddViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView, engine, listener);
+    public MediaPickerAddViewHolder(@NonNull View itemView, ImageLoadEngine engine, MediaPickerInterface pickerInterface, OnItemViewClickListener<PickerBean> listener) {
+        super(itemView, engine, pickerInterface, listener);
         ivAddCover = itemView.findViewById(R.id.iv_add_cover);
     }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import com.june.mediapicker.R;
 import com.june.mediapicker.bean.PickerBean;
 import com.june.mediapicker.utils.ImageLoadEngine;
+import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
 public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
@@ -16,8 +17,8 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
     private AppCompatImageView ivVideoDelete;
     private AppCompatTextView tvUploadProgress;
 
-    public MediaPickerVideoViewHolder(@NonNull View itemView, ImageLoadEngine engine, OnItemViewClickListener<PickerBean> listener) {
-        super(itemView, engine, listener);
+    public MediaPickerVideoViewHolder(@NonNull View itemView, ImageLoadEngine engine, MediaPickerInterface pickerInterface, OnItemViewClickListener<PickerBean> listener) {
+        super(itemView, engine, pickerInterface, listener);
         ivVideoCover = itemView.findViewById(R.id.iv_video_cover);
         ivVideoDelete = itemView.findViewById(R.id.iv_video_delete);
         tvUploadProgress = itemView.findViewById(R.id.tv_upload_progress);
@@ -25,12 +26,14 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
 
     @Override
     void bindViewHolder(MediaPickerViewHolder holder, int position, final PickerBean itemData) {
+        //关于图片加载
         if (null != loadEngine) {
             if (itemData.isLoadUrl()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivVideoCover);
             }
         }
 
+        //关于删除按钮
         if (itemData.isHiddenDeleteIcon) {
             ivVideoDelete.setVisibility(View.GONE);
         } else {

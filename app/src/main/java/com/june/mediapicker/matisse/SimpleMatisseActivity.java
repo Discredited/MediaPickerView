@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.blankj.utilcode.util.PermissionUtils;
@@ -51,6 +54,45 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
         initMediaPicker();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK || null == data) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_CHOOSE) {
+            //照片选择
+            List<String> list = Matisse.obtainPathResult(data);
+            if (null != list) {
+                mediaPickerView.setPickerList(list, PickerBean.PICKER_TYPE_IMAGE, false);
+            }
+        }
+    }
+
+    @Override
+    public void onItemViewClick(View view, int position, PickerBean itemData) {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_media_picker_options, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.submit_picker:
+                //提交选择
+                boolean uploadComplete = mediaPickerView.isUploadComplete();
+                ToastUtils.showShort(uploadComplete ? "上传成功" : "上传还没有结束");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initMediaPicker() {
         mediaPickerView = findViewById(R.id.media_picker_view);
         mediaPickerView.setMediaPickerInterface(new MediaPickerInterface() {
@@ -65,8 +107,20 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
             }
 
             @Override
-            public void uploadMediaList() {
+            public void uploadMedia(int position, final PickerBean bean, final AppCompatTextView progressView) {
+                if (null != progressView) {
+                    progressView.setText("正在上传......");
+                    progressView.setVisibility(View.VISIBLE);
+                    progressView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressView.setText("");
+                            progressView.setVisibility(View.GONE);
 
+                            bean.setUploadSuccess("上传成功");
+                        }
+                    }, position * 1000);
+                }
             }
 
             @Override
@@ -125,26 +179,5 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
                 .maxOriginalSize(10)
                 .imageEngine(new Glide4Engine())
                 .forResult(REQUEST_CODE_CHOOSE);
-    }
-
-    @Override
-    public void onItemViewClick(View view, int position, PickerBean itemData) {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK || null == data) {
-            return;
-        }
-
-        if (requestCode == REQUEST_CODE_CHOOSE) {
-            //照片选择
-            List<String> list = Matisse.obtainPathResult(data);
-            if (null != list) {
-                mediaPickerView.setPickerList(list, PickerBean.PICKER_TYPE_IMAGE, false);
-            }
-        }
     }
 }
