@@ -166,12 +166,27 @@ public class MediaPickerView extends RecyclerView {
         adapter.setLoadEngine(engine);
     }
 
-    public void setPickerList(List<String> list, int mediaType, boolean isClear) {
+    public void addPickerList(List<String> list, boolean isClear) {
+        setPickerList(convertToPicker(list), isClear);
+    }
+
+    public void addPickerList(List<String> list, int mediaType, boolean isClear) {
         setPickerList(convertToPicker(list, mediaType), isClear);
     }
 
     public void setPickerList(List<PickerBean> list, boolean isClear) {
         adapter.addPickerList(list, isClear);
+    }
+
+    public List<PickerBean> convertToPicker(List<String> list) {
+        ArrayList<PickerBean> pickerList = new ArrayList<>();
+        if (null != list && list.size() > 0) {
+            for (String url : list) {
+                PickerBean pickerBean = new PickerBean(url);
+                pickerList.add(pickerBean);
+            }
+        }
+        return pickerList;
     }
 
     public List<PickerBean> convertToPicker(List<String> list, int mediaType) {

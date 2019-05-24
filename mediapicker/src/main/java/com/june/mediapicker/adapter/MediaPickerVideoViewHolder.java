@@ -11,16 +11,20 @@ import com.june.mediapicker.utils.ImageLoadEngine;
 import com.june.mediapicker.utils.MediaPickerInterface;
 import com.june.mediapicker.utils.OnItemViewClickListener;
 
+import java.util.Locale;
+
 public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
 
     private AppCompatImageView ivVideoCover;
     private AppCompatImageView ivVideoDelete;
+    private AppCompatTextView tvVideoDuration;
     private AppCompatTextView tvUploadProgress;
 
     public MediaPickerVideoViewHolder(@NonNull View itemView, ImageLoadEngine engine, MediaPickerInterface pickerInterface, OnItemViewClickListener<PickerBean> listener) {
         super(itemView, engine, pickerInterface, listener);
         ivVideoCover = itemView.findViewById(R.id.iv_video_cover);
         ivVideoDelete = itemView.findViewById(R.id.iv_video_delete);
+        tvVideoDuration = itemView.findViewById(R.id.iv_video_duration);
         tvUploadProgress = itemView.findViewById(R.id.tv_upload_progress);
     }
 
@@ -32,6 +36,8 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivVideoCover);
             }
         }
+
+        tvVideoDuration.setText(String.format(Locale.CHINA, "%02d:%02d", itemData.videoDuration % 60, itemData.videoDuration / 60));
 
         //关于删除按钮
         if (itemData.isHiddenDeleteIcon) {

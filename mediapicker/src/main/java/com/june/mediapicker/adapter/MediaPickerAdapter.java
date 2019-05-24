@@ -44,7 +44,7 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
             return new MediaPickerImageViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
         }
         if (type == PickerBean.PICKER_TYPE_VIDEO) {
-            return new MediaPickerVideoViewHolder(inflater.inflate(R.layout.item_media_picker_image_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
+            return new MediaPickerVideoViewHolder(inflater.inflate(R.layout.item_media_picker_video_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
         }
         return new MediaPickerAddViewHolder(inflater.inflate(R.layout.item_media_picker_add_layout, viewGroup, false), loadEngine, mediaPickerInterface, itemViewClickListener);
     }

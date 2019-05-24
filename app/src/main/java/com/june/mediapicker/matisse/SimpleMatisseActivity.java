@@ -65,7 +65,7 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
             //照片选择
             List<String> list = Matisse.obtainPathResult(data);
             if (null != list) {
-                mediaPickerView.setPickerList(list, PickerBean.PICKER_TYPE_IMAGE, false);
+                mediaPickerView.addPickerList(list, false);
             }
         }
     }
@@ -170,7 +170,7 @@ public class SimpleMatisseActivity extends AppCompatActivity implements OnItemVi
 
     private void startMatisse() {
         Matisse.from(this)
-                .choose(MimeType.ofImage())
+                .choose(MimeType.ofAll())
                 .theme(R.style.Matisse_Dracula)
                 .countable(false)
                 //.addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
