@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -57,6 +58,10 @@ public class MediaPickerView extends RecyclerView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        initMediaPicker();
+    }
+
+    private void initMediaPicker() {
         setLayoutManager(new GridLayoutManager(getContext(), column));
         setHasFixedSize(true);
 
@@ -96,10 +101,41 @@ public class MediaPickerView extends RecyclerView {
         });
         setAdapter(adapter);
 
-        initMediaPicker();
-    }
+        //可拖拽功能
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder) {
+                //设置允许拖拽item的方向，线性式布局有2个方向
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, 0);
+            }
 
-    private void initMediaPicker() {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder, @NonNull ViewHolder target) {
+                int from = viewHolder.getAdapterPosition();
+                //PICKER_TYPE_ADD不能移动
+                if (adapter.getItemDataList().get(from).pickerType == PickerBean.PICKER_TYPE_ADD) {
+                    return true;
+                }
+                //移动位置不能替换PICKER_TYPE_ADD
+                if (adapter.getItemDataList().get(target.getAdapterPosition()).pickerType == PickerBean.PICKER_TYPE_ADD) {
+                    return true;
+                }
+                int to = target.getAdapterPosition() == adapter.getItemCount() - 1 ? adapter.getItemCount() - 2 : target.getAdapterPosition();
+                PickerBean pickerBean = adapter.getItemDataList().get(from);
+                adapter.getItemDataList().remove(from);
+                adapter.getItemDataList().add(to, pickerBean);
+                adapter.notifyItemMoved(from, to);//更新适配器中item的位置
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull ViewHolder viewHolder, int i) {
+
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(this);
+
         //初始添加一个addItem
         PickerBean pickerBean = new PickerBean();
         pickerBean.pickerType = PickerBean.PICKER_TYPE_ADD;

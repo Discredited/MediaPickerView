@@ -59,6 +59,10 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
         return items.size();
     }
 
+    public List<PickerBean> getItemDataList() {
+        return items;
+    }
+
     public void setLoadEngine(ImageLoadEngine engine) {
         this.loadEngine = engine;
     }
@@ -140,6 +144,9 @@ public class MediaPickerAdapter extends RecyclerView.Adapter<MediaPickerViewHold
             return false;
         }
         for (PickerBean bean : items) {
+            if (bean.pickerType == PickerBean.PICKER_TYPE_ADD) {
+                continue;
+            }
             if (!bean.isUploadSuccess()) {
                 return false;
             }
