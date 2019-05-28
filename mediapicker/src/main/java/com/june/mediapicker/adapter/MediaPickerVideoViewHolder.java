@@ -35,6 +35,9 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
             if (itemData.isLoadUrl()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivVideoCover);
             }
+            if (itemData.isLoadDeleteIcon()) {
+                ivVideoDelete.setImageResource(itemData.pickerDeleteResourceId);
+            }
         }
 
         tvVideoDuration.setText(String.format(Locale.CHINA, "%02d:%02d", itemData.videoDuration % 60, itemData.videoDuration / 60));
@@ -52,6 +55,13 @@ public class MediaPickerVideoViewHolder extends MediaPickerViewHolder {
                     }
                 }
             });
+        }
+
+        //关于上传
+        if (itemData.isAutoUpload) {
+            if (null != mediaPickerInterface) {
+                mediaPickerInterface.uploadMedia(getAdapterPosition(), itemData, tvUploadProgress);
+            }
         }
     }
 }

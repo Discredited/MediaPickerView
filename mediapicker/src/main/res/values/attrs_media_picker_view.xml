@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MediaPickerView">
+        <attr name="picker_max_count" format="integer" />
+        <attr name="picker_column" format="integer" />
+        <attr name="picker_item_decoration" format="reference" />
+        <attr name="picker_item_add_cover" format="reference" />
+        <attr name="picker_item_delete_icon" format="reference" />
+    </declare-styleable>
+</resources>

@@ -19,6 +19,7 @@ public class PickerBean {
     //picker type
     public int pickerType;
     public int pickerCoverResourceId;  //封面资源ID
+    public int pickerDeleteResourceId;  //删除资源ID
     public String pickerCoverUrl;  //封面网络或者本地地址
 
     public boolean isHiddenDeleteIcon;  //是否隐藏删除按钮
@@ -30,6 +31,10 @@ public class PickerBean {
 
     public boolean isLoadResource() {
         return pickerCoverResourceId != 0;
+    }
+
+    public boolean isLoadDeleteIcon() {
+        return pickerDeleteResourceId != 0;
     }
 
     public boolean isLoadUrl() {

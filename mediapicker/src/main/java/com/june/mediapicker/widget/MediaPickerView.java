@@ -1,6 +1,7 @@
 package com.june.mediapicker.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,10 +31,14 @@ import java.util.List;
  */
 public class MediaPickerView extends RecyclerView {
 
-    private int column;
+    private int column;  //列表列数
+    private int maxCount;  //最大选择数量
+    private int currentCount;  //当前数量
 
-    private int currentCount;
-    private int maxCount;
+    private int itemDecorationResId;
+    private int itemAddCoverResId;
+    private int itemDeleteResId;
+
     private MediaPickerAdapter adapter;
     private MediaPickerInterface mediaPickerInterfaceImpl;
 
@@ -49,10 +54,17 @@ public class MediaPickerView extends RecyclerView {
 
     public MediaPickerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        column = 3;
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MediaPickerView, defStyle, 0);
+        try {
+            column = array.getInteger(R.styleable.MediaPickerView_picker_column, 3);
+            maxCount = array.getInteger(R.styleable.MediaPickerView_picker_max_count, 9);
+            itemDecorationResId = array.getResourceId(R.styleable.MediaPickerView_picker_item_decoration, R.drawable.shape_rect_media_picker_item_decoration);
+            itemAddCoverResId = array.getResourceId(R.styleable.MediaPickerView_picker_item_add_cover, R.drawable.ic_media_add);
+            itemDeleteResId = array.getResourceId(R.styleable.MediaPickerView_picker_item_delete_icon, R.drawable.ic_media_delete);
+        } finally {
+            array.recycle();
+        }
         currentCount = 0;
-        maxCount = 9;
     }
 
     @Override
@@ -65,7 +77,7 @@ public class MediaPickerView extends RecyclerView {
         setLayoutManager(new GridLayoutManager(getContext(), column));
         setHasFixedSize(true);
 
-        addItemDecoration(new MediaPickerItemDecoration(getContext(), R.drawable.shape_rect_media_picker_item_decoration));
+        addItemDecoration(new MediaPickerItemDecoration(getContext(), itemDecorationResId));
 
         adapter = new MediaPickerAdapter();
         adapter.setItemViewClickListener(new OnItemViewClickListener<PickerBean>() {
@@ -139,6 +151,8 @@ public class MediaPickerView extends RecyclerView {
         //初始添加一个addItem
         PickerBean pickerBean = new PickerBean();
         pickerBean.pickerType = PickerBean.PICKER_TYPE_ADD;
+        pickerBean.pickerCoverResourceId = itemAddCoverResId;
+        pickerBean.pickerDeleteResourceId = itemDeleteResId;
         adapter.addPickerBean(pickerBean, 0);
         adapter.notifyDataSetChanged();
     }
@@ -183,6 +197,7 @@ public class MediaPickerView extends RecyclerView {
         if (null != list && list.size() > 0) {
             for (String url : list) {
                 PickerBean pickerBean = new PickerBean(url);
+                pickerBean.pickerDeleteResourceId = itemDeleteResId;
                 pickerList.add(pickerBean);
             }
         }
@@ -196,6 +211,7 @@ public class MediaPickerView extends RecyclerView {
                 PickerBean pickerBean = new PickerBean();
                 pickerBean.pickerType = mediaType;
                 pickerBean.pickerCoverUrl = url;
+                pickerBean.pickerDeleteResourceId = itemDeleteResId;
                 pickerList.add(pickerBean);
             }
         }

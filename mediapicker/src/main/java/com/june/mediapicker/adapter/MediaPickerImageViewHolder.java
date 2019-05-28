@@ -30,6 +30,9 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
             if (itemData.isLoadUrl()) {
                 loadEngine.loadImageCover(itemView.getContext(), itemData.pickerCoverUrl, ivImageCover);
             }
+            if (itemData.isLoadDeleteIcon()) {
+                ivImageDelete.setImageResource(itemData.pickerDeleteResourceId);
+            }
         }
 
         if (itemData.isHiddenDeleteIcon) {
@@ -45,7 +48,6 @@ public class MediaPickerImageViewHolder extends MediaPickerViewHolder {
                 }
             });
         }
-
 
         //关于上传
         if (itemData.isAutoUpload) {
